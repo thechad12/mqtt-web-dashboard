@@ -15,6 +15,7 @@ public class Subscriber implements MqttCallback {
 
     private String serverURI;
     private MqttAsyncClient client;
+    private String message;
     private String clientID = UUID.randomUUID().toString();
 
     public Subscriber(String serverURI) throws MqttException {
@@ -36,6 +37,10 @@ public class Subscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
+       this.message = new String(message.getPayload());
+    }
 
+    public String getMessage() {
+        return this.message;
     }
 }
