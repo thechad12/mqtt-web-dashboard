@@ -27,7 +27,8 @@ public class Subscriber implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable ex) {
-
+        System.out.println("Connection Lost " + ex.toString());
+        System.exit(1);
     }
 
     @Override
