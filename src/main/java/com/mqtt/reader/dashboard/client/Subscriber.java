@@ -44,4 +44,5 @@ public class Subscriber implements MqttCallback {
     public String getMessage() {
         return this.message;
     }
+
 }

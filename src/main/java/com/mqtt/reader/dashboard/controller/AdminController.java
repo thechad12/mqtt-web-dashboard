@@ -1,6 +1,8 @@
 package com.mqtt.reader.dashboard.controller;
 
+import com.mqtt.reader.dashboard.controller.Subscribers;
 import com.mqtt.reader.dashboard.client.Subscriber;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,9 @@ public class AdminController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public Subscribers subscribers = new Subscribers();
 
    @RequestMapping("/connections")
     public String getConnections() {
@@ -41,8 +46,10 @@ public class AdminController {
        model.addAttribute("topic", topic);
        model.addAttribute("endpoint", endpoint);
        MqttAsyncClient client = new MqttAsyncClient(endpoint,UUID.randomUUID().toString());
-       client.subscribe(topics,qos);
+       IMqttToken t = client.subscribe(topics,qos);
+       String[] subTopics = t.getTopics();
        client.setCallback(new Subscriber(endpoint));
+       subscribers.add(client,subTopics);
        return "subscribe";
    }
 }
